@@ -14,6 +14,7 @@ import utils.ManageProperties;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import domain.releaseSearch.SearchReleaseResponse;
 import domain.repositoriesSearch.SearchRepositoriesResponse;
 
 public class GitHubApiService extends ServiceHandler {
@@ -21,7 +22,6 @@ public class GitHubApiService extends ServiceHandler {
 	private HttpsURLConnection response;
 	private GitHubApiServicesAvailable serviceName;
 	private SearchParameters searchParameters;
-	private SearchRepositoriesResponse repositoriesResponse; 
 
 	@Override
 	protected String getUri() {
@@ -32,9 +32,15 @@ public class GitHubApiService extends ServiceHandler {
 			return String.format("%srepos/%s/%s/releases/latest", host,
 					searchParameters.getOwner(), searchParameters.getRepo());
 		} else if (isASearchForRepositoriesRequest(serviceName)) {
-			return String.format("%ssearch/repositories?q=%s&sort=%s&order=%s",
+			return String.format(
+					"%ssearch/repositories?q=%s&sort=%s&order=%s&per_page=%d",
 					host, searchParameters.getQuery(),
-					searchParameters.getSort(), searchParameters.getOrder());
+					searchParameters.getSort(), searchParameters.getOrder(),
+					searchParameters.getNumberOfResults());
+		} else if (isASearchForAReleaseTag(serviceName)) {
+			return String.format("%srepos/%s/%s/releases/tags/%s", host,
+					searchParameters.getOwner(), searchParameters.getRepo(),
+					searchParameters.getTagName());
 		}
 		return null;
 	}
@@ -43,28 +49,51 @@ public class GitHubApiService extends ServiceHandler {
 	public HttpsURLConnection getRawResponse() {
 		return response;
 	}
-
-	@Override
-	public Object getParsedResponse() {
-		BufferedReader bufferedReader = null;
+	
+	public SearchRepositoriesResponse getSearchRepositoriesResponse(){
 		StringBuilder responseBuilder = null;
 		
 		try {
-			bufferedReader = new BufferedReader(new InputStreamReader(response.getInputStream()));
-			responseBuilder = new StringBuilder();
-			String line;
+			responseBuilder = readInputStream();
+
+			return (SearchRepositoriesResponse) PojoMapper.fromJson(responseBuilder.toString(),
+						SearchRepositoriesResponse.class);
 			
-			while ((line = bufferedReader.readLine()) != null) {
-				responseBuilder.append(line);
-			}
-			
-			repositoriesResponse = (SearchRepositoriesResponse) PojoMapper.fromJson(responseBuilder.toString(), SearchRepositoriesResponse.class); 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		return null;
+	}
+	
+	public SearchReleaseResponse getSearchReleaseResponse(){
+		StringBuilder responseBuilder = null;
 		
-		
-		return repositoriesResponse;
+		try {
+			responseBuilder = readInputStream();
+
+			return (SearchReleaseResponse) PojoMapper.fromJson(responseBuilder.toString(),
+					SearchReleaseResponse.class);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	private StringBuilder readInputStream() throws IOException {
+		BufferedReader bufferedReader;
+		StringBuilder responseBuilder;
+		bufferedReader = new BufferedReader(new InputStreamReader(
+				response.getInputStream()));
+		responseBuilder = new StringBuilder();
+		String line;
+
+		while ((line = bufferedReader.readLine()) != null) {
+			responseBuilder.append(line);
+		}
+		return responseBuilder;
 	}
 
 	@Override
@@ -91,8 +120,14 @@ public class GitHubApiService extends ServiceHandler {
 				.equals(GitHubApiServicesAvailable.GET_LATEST_RELEASE);
 	}
 
+	private boolean isASearchForAReleaseTag(
+			GitHubApiServicesAvailable servicesAvailable) {
+		return servicesAvailable
+				.equals(GitHubApiServicesAvailable.GET_RELEASE_BY_TAG_NAME);
+	}
+
 	public enum GitHubApiServicesAvailable {
-		SEARCH_REPOSITORIES, GET_LATEST_RELEASE
+		SEARCH_REPOSITORIES, GET_LATEST_RELEASE, GET_RELEASE_BY_TAG_NAME
 	}
 
 }

@@ -11,24 +11,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/**
- * @author bvieira
- * This class maps POJO's from and to Json. Mapping means that a plain old java object
- * can be serialized into a Json object, vice versa.
- */
 public class PojoMapper {
 	
 	private static ObjectMapper objectMapper = new ObjectMapper();
 	private static JsonFactory jsonFactory = new JsonFactory();
-	
-//	public static <T> Object fromJson(Response httpResponse, 
-//			Class<T> pojoClass)
-//		    throws JsonMappingException, JsonParseException, 
-//		    IOException {
-//		
-//		return objectMapper.readValue(
-//				httpResponse.readEntity(String.class), pojoClass);
-//	}
 	
 	public static <T> Object fromJson(String jsonContents, 
 			Class<T> pojoClass)
@@ -60,14 +46,6 @@ public class PojoMapper {
 		return stringWriter.toString();
 	}
 
-//	public static <T> Object fromJson(Response httpResponse,
-//			TypeReference<List<T>> typeReference) throws 
-//			JsonParseException, JsonMappingException, IOException {
-//		
-//		return objectMapper.readValue(
-//				httpResponse.readEntity(String.class), typeReference);
-//	}
-	
 	public static <T> Object fromJson(String jsonContents,
 			TypeReference<Collection<T>> typeReference) throws 
 			JsonParseException, JsonMappingException, IOException {

@@ -12,7 +12,6 @@ public abstract class ServiceHandler {
 
 	protected abstract String getUri();
 	public abstract HttpsURLConnection getRawResponse();
-	public abstract Object getParsedResponse();
 	public abstract void setRequestMessage(ServiceMessage message);
 
 	public abstract void sendRequest() throws 

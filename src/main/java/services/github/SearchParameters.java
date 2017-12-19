@@ -7,15 +7,27 @@ public class SearchParameters {
 	private String order;
 	private String owner;
 	private String repo;
+	private String tagName;
+	private int numberOfResults;
 	
-	public SearchParameters(String query, String sort, String order,
-			String owner, String repo) {
+	public SearchParameters(String query, String sort, String order, int numberOfResults) {
 		this.query = query;
 		this.sort = sort;
 		this.order = order;
+		this.numberOfResults = numberOfResults;
+	}
+	
+	public SearchParameters(String owner, String repo) {
 		this.owner = owner;
 		this.repo = repo;
 	}
+	
+	public SearchParameters(String owner, String repo, String tagName) {
+		this.owner = owner;
+		this.repo = repo;
+		this.tagName = tagName;
+	}
+	
 	public String getQuery() {
 		return query;
 	}
@@ -31,5 +43,10 @@ public class SearchParameters {
 	public String getRepo() {
 		return repo;
 	}
-	
+	public String getTagName() {
+		return tagName;
+	}
+	public int getNumberOfResults() {
+		return numberOfResults;
+	}
 }
