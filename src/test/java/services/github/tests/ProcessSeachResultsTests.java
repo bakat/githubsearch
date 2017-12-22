@@ -152,47 +152,4 @@ public class ProcessSeachResultsTests {
 				"* The tag name informed is related to the latest release."));
 	}
 	
-//	@Test
-//	public void shouldCheckForOlderReleaseFromTag()
-//			throws JsonMappingException, JsonGenerationException, IOException {
-//		ProcessSearchResults results = new ProcessSearchResults(
-//				gitHubApiSeachMock);
-//		Owner owner = new Owner();
-//		owner.setLogin("mockOwner");
-//		
-//		Items items = new Items();
-//		items.setName("mockTest");
-//		items.setOwner(owner);
-//		items.setStargazersCount(1);
-//
-//		List<Items> itemsList = new ArrayList<Items>();
-//		itemsList.add(items);
-//
-//		SearchRepositoriesResponse repositoriesResponse = new SearchRepositoriesResponse();
-//		repositoriesResponse.setItems(itemsList);
-//
-//		when(gitHubApiService.getSearchRepositoriesResponse()).thenReturn(repositoriesResponse);
-//		when(
-//				gitHubApiSeachMock
-//						.getRepositoryWithHighestNumberOfStars(any(String.class)))
-//				.thenReturn(gitHubApiService);
-//		
-//		when(httpUrlConnection.getResponseCode()).thenReturn(
-//				HttpsURLConnection.HTTP_OK);
-//		when(gitHubApiService.getRawResponse()).thenReturn(
-//				httpUrlConnection);
-//		when(
-//				gitHubApiSeachMock
-//						.getLatestReleaseForARepository(any(String.class), any(String.class)))
-//				.thenReturn(gitHubApiService);
-//		
-//		SearchReleaseResponse releaseResponse = new SearchReleaseResponse();
-//		releaseResponse.setTagName("v1.0.0");
-//		
-//		when(gitHubApiService.getSearchReleaseResponse()).thenReturn(releaseResponse);
-//		
-//		Assert.assertTrue(results.process("mockTest", "v1.0.0").contains(
-//				"* The tag name informed refers to an older release."));
-//	}
-
 }

@@ -37,6 +37,7 @@ public class ProcessSearchResults {
 			buildStrinResults(results,"* Repository containing the highest number of stars:");
 			buildStrinResults(results,"  - Name: " + firstRepo.getName());
 			buildStrinResults(results,"  - Number of Stars: " + firstRepo.getStargazersCount());
+			buildStrinResults(results, "");
 			
 			service = search.getLatestReleaseForARepository(firstRepo.getOwner().getLogin(), repositoryName);
 			
